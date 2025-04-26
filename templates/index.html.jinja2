@@ -1,47 +1,94 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} 
+{% block content %}
 
 <div>
-  <h1 class="title"> Login Form Validation </h1>
-  <form method="POST" action="/login" class="process-form">
+  <h1 class="title">Login Form Validation</h1>
+
+  <form method="POST" action="/login" class="process-form" id="login-form">
     {{ form.hidden_tag() }}
 
-   
-    <div class="form-group mb-3">
-      {{ form.username.label(class_="form-label") }}
-      {{ form.username(class_="form-control") }}
-
-      {% for error in form.username.errors %}
-        <div class="text-danger">{{ error }}</div>
-      {% endfor %}
+    <!-- Username -->
+    <div class="form-group mb-3 position-relative p-3 rounded" id="username-group">
+      {{ form.username.label(class_="form-label", id="username-label") }}
+      <div class="input-icon">
+        {{ form.username(class_="form-control pe-5", id="username") }}
+        <i class="bi bi-x-circle-fill invalid-icon" id="username-icon"></i>
+      </div>
     </div>
 
-    
-    <div class="form-group mb-3">
-      {{ form.password.label(class_="form-label") }}
-      {{ form.password(class_="form-control") }}
-      
-      {% for error in form.password.errors %}
-
-        <div class="text-danger">{{ error }} </div>
-      {% endfor %}
+    <!-- Password -->
+    <div class="form-group mb-3 position-relative p-3 rounded" id="password-group">
+      {{ form.password.label(class_="form-label", id="password-label") }}
+      <div class="input-icon">
+        {{ form.password(class_="form-control pe-5", id="password") }}
+        <i class="bi bi-x-circle-fill invalid-icon" id="password-icon"></i>
+      </div>
     </div>
 
-    
-    <div class="form-group mb-3">
-      {{ form.email.label(class_="form-label") }}
-      {{ form.email(class_="form-control") }}
-
-      {% for error in form.email.errors %}
-        <div class="text-danger">{{ error }}</div>
-      {% endfor %}
+    <!-- Email -->
+    <div class="form-group mb-3 position-relative p-3 rounded" id="email-group">
+      {{ form.email.label(class_="form-label", id="email-label") }}
+      <div class="input-icon">
+        {{ form.email(class_="form-control pe-5", id="email") }}
+        <i class="bi bi-x-circle-fill invalid-icon" id="email-icon"></i>
+      </div>
     </div>
 
-   
-    <div class="text-center">
+    <!-- Botón submit -->
+    <div class="d-grid gap-2 col-6 mx-auto">
       {{ form.submit(class_="btn btn-primary") }}
     </div>
 
   </form>
 </div>
+
+<!-- Agregamos el script -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  function validateField(fieldId, minLength, isEmail=false) {
+    const input = document.getElementById(fieldId);
+    const group = document.getElementById(fieldId + '-group');
+    const label = document.getElementById(fieldId + '-label');
+    const icon = document.getElementById(fieldId + '-icon');
+
+    input.addEventListener('input', function () {
+      let isValid = false;
+      
+      if (isEmail) {
+        const value = input.value.trim();
+        isValid = value.includes('@') && value.includes('.');
+      } else {
+        isValid = input.value.trim().length >= minLength;
+      }
+
+      if (isValid) {
+        group.classList.remove('bg-danger-subtle');
+        group.classList.add('bg-success-subtle');
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+        label.classList.remove('text-danger');
+        label.classList.add('text-success');
+        icon.classList.remove('bi-x-circle-fill', 'invalid-icon');
+        icon.classList.add('bi-check-circle-fill', 'valid-icon');
+      } else {
+        group.classList.remove('bg-success-subtle');
+        group.classList.add('bg-danger-subtle');
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+        label.classList.remove('text-success');
+        label.classList.add('text-danger');
+        icon.classList.remove('bi-check-circle-fill', 'valid-icon');
+        icon.classList.add('bi-x-circle-fill', 'invalid-icon');
+      }
+    });
+  }
+
+  validateField('username', 3);
+  validateField('password', 6);
+  validateField('email', 0, true);
+
+});
+</script>
 
 {% endblock %}

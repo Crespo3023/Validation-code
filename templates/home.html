@@ -1,20 +1,21 @@
-{% extends "base.html" %} {% block content %}
-<div class="container">
-  <h1 class="title"> Welcome Home </h1>
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <div class="card-body text-center">
+      <h1 class="title mb-4">Welcome Home</h1>
 
-  <form method="POST" action="/register" class="process-form">
+      <div class="alert alert-success" role="alert">
+        <h5 class="mb-0">
+          Saludos, 
+          <span style="color: blue; font-weight: bold; font-size: 1.2rem;">
+            {{ message }}
+          </span>
+        </h5>
+      </div>
 
-    <p>
-      Saludos, 
-      <span style="color: blue; font-weight: bold; font-size: 1.2rem;">
-        {{ message }}
-      </span>
-    </p>
-    
-  </form>
+     
+    </div>
+  </div>
 </div>
-
-
-
-
 {% endblock %}
